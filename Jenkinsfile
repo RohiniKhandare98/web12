@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = "rohini1/web1"
+        DOCKER_IMAGE = "rohini1/web_new"
     }
 
     stages {
@@ -29,8 +29,8 @@ pipeline {
 
         stage("Deploy Docker Service") {
             steps {
-               // sh "/usr/bin/docker service rm backend || true"
-                sh "/usr/bin/docker run -d --name backend -p 4000:80 rohini1/web1"
+               sh "/usr/bin/docker service rm backend || true"
+                sh "/usr/bin/docker run -d --name backend -p 4000:80 ${DOCKER_IMAGE}"
             }
         }
         
