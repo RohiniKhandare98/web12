@@ -1,15 +1,62 @@
 pipeline {
     agent any
-    environment {
+  
+     environment {
         DOCKER_IMAGE = "rohini1/web_new"
+	   // SCANNER_HOME=tool 'sonar-scanner'
+	
     }
-
     stages {
 
         stage('SCM') {
             steps {
-                git branch: 'main', url: 'https://github.com/RohiniKhandare98/web12.git'
+                git branch: 'main', credentialsId: '61a12828-423b-4335-9337-5fda0511ab2d', url: 'https://github.com/RohiniKhandare98/web12.git'
             }
+        }
+        
+        // stage("Sonarqube Analysis "){
+        //  steps{   
+        //     script {
+        //      def scannerHome = tool name: 'sonar-scanner', type: 'ToolInstallation'
+           
+        //         withSonarQubeEnv('sonar-server') {
+        //             //sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=web_app -Dsonar.projectKey=web_app
+        //         sh '''   
+        //             ${scannerHome}/bin/sonar-scanner \ 
+        //             -Dsonar.projectKey=web_app \
+        //             -Dsonar.sources=. \
+        //             -Dsonar.host.url=http://192.168.80.167:9000 \
+        //             -Dsonar.login=sqp_d51608d022e2a637f750a557998f700b644c70b8
+        //             '''
+        //         }
+            
+        //     }
+        //  }    
+        // }
+
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool name: 'sonar-scanner', type: 'ToolInstallation'
+                    withSonarQubeEnv(SONARQUBE) {
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=web_app \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://192.168.80.167:9000 \
+                        -Dsonar.login=sqp_d51608d022e2a637f750a557998f700b644c70b8
+                        """
+                    }
+                }
+            }
+        }
+         stage("quality gate"){
+           steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token' 
+                }
+            } 
         }
 
         stage('Build Docker Image') {
@@ -29,10 +76,10 @@ pipeline {
 
         stage("Deploy Docker Service") {
             steps {
-               sh "/usr/bin/docker service rm -rf backend || true"
+               sh "/usr/bin/docker service rm -rf backend"
                 sh "/usr/bin/docker run -d --name backend -p 4000:80 ${DOCKER_IMAGE}"
             }
         }
         
     }
-}
+}  
