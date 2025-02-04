@@ -1,27 +1,38 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_IMAGE = "rohini1/web1"
+    }
 
     stages {
-        stage('git') {
+
+        stage('SCM') {
             steps {
-                git 'https://github.com/RohiniKhandare98/CDAC_Project.git'
+                git branch: 'main', url: 'https://github.com/RohiniKhandare98/web12.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    sh 'docker build -t web3 .'
+                sh "/usr/bin/docker image build -t ${DOCKER_IMAGE} ."
+            }
+        }
+
+        stage("Push Docker Image") {
+            steps {
+                withCredentials([string(credentialsId: 'DOCKER_HUB_TOKEN', variable: 'DOCKER_HUB_TOKEN')]) {
+                    sh "echo $DOCKER_HUB_TOKEN | /usr/bin/docker login -u rohini1 --password-stdin"
+                    sh "/usr/bin/docker image push ${DOCKER_IMAGE}"
                 }
             }
         }
 
-        stage('Run Docker Container') {
+        stage("Deploy Docker Service") {
             steps {
-                script {
-                    sh 'docker run -d -p 8000:80 --name myapache-container web3'
-                }
+               // sh "/usr/bin/docker service rm backend || true"
+                sh "/usr/bin/docker run -d --name backend -p 4000:80 rohini1/web1"
             }
         }
+        
     }
 }
