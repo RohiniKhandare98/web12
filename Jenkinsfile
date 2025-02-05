@@ -10,7 +10,7 @@ pipeline {
 
         stage('SCM') {
             steps {
-                git branch: 'main', credentialsId: '61a12828-423b-4335-9337-5fda0511ab2d', url: 'https://github.com/RohiniKhandare98/web12.git'
+                git  'https://github.com/RohiniKhandare98/web12.git'
             }
         }
         
@@ -37,12 +37,12 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                    withSonarQubeEnv(SONARQUBE) {
+                    withSonarQubeEnv('sonar-server') {
                         sh """
                                ${SCANNER_HOME}/bin/sonar-scanner \
-                        -Dsonar.projectKey=web_app \
+                        -Dsonar.projectKey=p1 \
                         -Dsonar.sources=. \
-                        -Dsonar.host.url=http://192.168.80.167:9000 \
+                        -Dsonar.host.url=http://localhost:9000 \
                         -Dsonar.login=sqp_3a5ec1b898b5061aec3e29cfb581fc6b21ae85ef
                         """
                     }
