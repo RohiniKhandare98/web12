@@ -10,7 +10,7 @@ pipeline {
 
         stage('SCM') {
             steps {
-                git  'https://github.com/RohiniKhandare98/web12.git'
+             git branch: 'main', credentialsId: '61a12828-423b-4335-9337-5fda0511ab2d', url: 'https://github.com/RohiniKhandare98/web12.git'
             }
         }
         
