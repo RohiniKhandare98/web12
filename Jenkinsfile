@@ -3,7 +3,7 @@ pipeline {
   
      environment {
         DOCKER_IMAGE = "rohini1/web_new"
-	   // SCANNER_HOME=tool 'sonar-scanner'
+	   SCANNER_HOME=tool 'sonar-scanner'
 	
     }
     stages {
@@ -37,18 +37,17 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                script {
-                    def scannerHome = tool name: 'sonar-scanner', type: 'ToolInstallation'
                     withSonarQubeEnv(SONARQUBE) {
                         sh """
-                        ${scannerHome}/bin/sonar-scanner \
+                          //   /opt/sonar-scanner/bin/sonar-scanner
+                        ${SCANNER_HOME}/bin/sonar-scanner \
                         -Dsonar.projectKey=web_app \
                         -Dsonar.sources=. \
                         -Dsonar.host.url=http://192.168.80.167:9000 \
-                        -Dsonar.login=sqp_d51608d022e2a637f750a557998f700b644c70b8
+                        -Dsonar.login=sqp_3a5ec1b898b5061aec3e29cfb581fc6b21ae85ef
                         """
                     }
-                }
+                
             }
         }
          stage("quality gate"){
