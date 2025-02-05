@@ -75,7 +75,7 @@ pipeline {
 
         stage("Deploy Docker Service") {
             steps {
-               sh "/usr/bin/docker service rm -rf backend"
+               sh "/usr/bin/docker service rm backend"
                 sh "/usr/bin/docker run -d --name backend -p 4000:80 ${DOCKER_IMAGE}"
             }
         }
