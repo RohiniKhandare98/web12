@@ -39,8 +39,7 @@ pipeline {
             steps {
                     withSonarQubeEnv(SONARQUBE) {
                         sh """
-                          //   /opt/sonar-scanner/bin/sonar-scanner
-                        ${SCANNER_HOME}/bin/sonar-scanner \
+                               ${SCANNER_HOME}/bin/sonar-scanner \
                         -Dsonar.projectKey=web_app \
                         -Dsonar.sources=. \
                         -Dsonar.host.url=http://192.168.80.167:9000 \
