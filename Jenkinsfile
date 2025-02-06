@@ -71,11 +71,17 @@ pipeline {
                 sh "/usr/bin/docker image build -t ${DOCKER_IMAGE} ."
             }
         }
+
+stage('OWASP FS SCAN') {
+           steps {
+               dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+               dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+           }
+       }
 stage('TRIVY SCAN') {
             steps {
-                 sh """
-                    trivy image --severity HIGH,CRITICAL ${DOCKER_IMAGE}
-                    """
+                 sh "trivy fs . > trivyfs.txt"
+                   
             }
         }
 
@@ -86,6 +92,12 @@ stage('TRIVY SCAN') {
                     sh "echo $DOCKER_HUB_TOKEN | /usr/bin/docker login -u rohini1 --password-stdin"
                     sh "/usr/bin/docker image push ${DOCKER_IMAGE}"
                 }
+            }
+        }
+
+ stage("TRIVY"){
+            steps{
+                sh "trivy image ${DOCKER_IMAGE} > trivyimage.txt" 
             }
         }
 
