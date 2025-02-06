@@ -58,12 +58,12 @@ pipeline {
         }
 */
 
-	stage('TRIVY SCAN') {
+/*	stage('TRIVY SCAN') {
             steps {
                 sh "trivy $DOCKER_IMAGE"
             }
         }
-
+*/
 
 
         stage('Build Docker Image') {
@@ -71,6 +71,14 @@ pipeline {
                 sh "/usr/bin/docker image build -t ${DOCKER_IMAGE} ."
             }
         }
+stage('TRIVY SCAN') {
+            steps {
+                 sh """
+                    trivy image --severity HIGH,CRITICAL ${DOCKER_IMAGE}
+                    """
+            }
+        }
+
 
         stage("Push Docker Image") {
             steps {
