@@ -25,7 +25,7 @@ pipeline {
         //             ${scannerHome}/bin/sonar-scanner \ 
         //             -Dsonar.projectKey=web_app \
         //             -Dsonar.sources=. \
-        //             -Dsonar.host.url=http://192.168.80.167:9000 \
+        //             -Dsonar.host.url=http://192.168.0.167:9000 \
         //             -Dsonar.login=sqp_d51608d022e2a637f750a557998f700b644c70b8
         //             '''
         //         }
@@ -42,7 +42,7 @@ pipeline {
                                ${SCANNER_HOME}/bin/sonar-scanner \
                         -Dsonar.projectKey=p1 \
                         -Dsonar.sources=. \
-                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.host.url=http://192.168.80.167:9000 \
                         -Dsonar.login=sqp_3a5ec1b898b5061aec3e29cfb581fc6b21ae85ef
                         """
                     }
