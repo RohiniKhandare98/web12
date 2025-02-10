@@ -43,7 +43,7 @@ pipeline {
                         -Dsonar.projectKey=p1 \
                         -Dsonar.sources=. \
                         -Dsonar.host.url=http://192.168.80.167:9000 \
-                        -Dsonar.login=sqp_3a5ec1b898b5061aec3e29cfb581fc6b21ae85ef
+                        -Dsonar.login=sqp_e0d61d1f4775556b111dc560eb074a43d1e9caaa
                         """
                     }
                 
